@@ -1,0 +1,86 @@
+name: Acquire Unity License
+
+on:
+  workflow_dispatch:
+
+jobs:
+  request_alf:
+    name: Request .alf file
+    runs-on: ubuntu-latest
+    outputs:
+      alf: ${{ steps.gen.outputs.alf }}
+    steps:
+      - name: Generate .alf with Unity docker image
+        id: gen
+        run: |
+          docker run --rm -v "$PWD":/workspace -w /workspace \
+            unityci/editor:ubuntu-6000.0.85f1-base-3 \
+            unity-editor -batchmode -nographics -createManualActivationFile -quit -logfile /dev/stdout || true
+          ALF=$(ls Unity_v*.alf 2>/dev/null | head -n1)
+          if [ -z "$ALF" ]; then
+            echo "No .alf file was generated"
+            ls -la
+            exit 1
+          fi
+          echo "alf=$ALF" >> "$GITHUB_OUTPUT"
+          ls -la *.alf
+
+      - name: Upload .alf artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: activation-file
+          path: ${{ steps.gen.outputs.alf }}
+
+  acquire_ulf:
+    name: Acquire .ulf file
+    needs: request_alf
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download .alf
+        uses: actions/download-artifact@v4
+        with:
+          name: activation-file
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
+      - name: Install unity-license-activate
+        run: npm install --global unity-license-activate
+
+      - name: Activate the license
+        id: activate
+        continue-on-error: true
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          if [ -z "$UNITY_EMAIL" ] || [ -z "$UNITY_PASSWORD" ]; then
+            echo "Secrets UNITY_EMAIL / UNITY_PASSWORD are not set!"
+            exit 1
+          fi
+          ALF=$(ls Unity_v*.alf | head -n1)
+          unity-license-activate "$UNITY_EMAIL" "$UNITY_PASSWORD" "$ALF"
+
+      - name: Upload .ulf license file
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unity-license-ulf
+          path: "*.ulf"
+          if-no-files-found: ignore
+
+      - name: Upload error screenshot
+        if: steps.activate.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: error-screenshot
+          path: error.png
+          if-no-files-found: ignore
+
+      - name: Fail if activation failed
+        if: steps.activate.outcome == 'failure'
+        run: |
+          echo "License activation failed. Check the error-screenshot artifact."
+          exit 1
