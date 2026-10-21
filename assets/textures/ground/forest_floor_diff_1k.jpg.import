@@ -15,7 +15,7 @@ dest_files=["res://.godot/imported/forest_floor_diff_1k.jpg-1e34347b3aa14cde3e07
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

@@ -18,7 +18,7 @@ dest_files=["res://.godot/imported/1990s-off-roader_1990s-off-roader_tire_color.
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

@@ -15,7 +15,7 @@ dest_files=["res://.godot/imported/brown_mud_leaves_01_rough_1k.jpg-670c527b844a
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

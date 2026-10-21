@@ -18,7 +18,7 @@ dest_files=["res://.godot/imported/off-road-4x4_off-road-4x4_body_normal.jpg-761
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

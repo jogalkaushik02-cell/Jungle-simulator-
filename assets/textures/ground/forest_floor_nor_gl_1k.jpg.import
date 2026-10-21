@@ -15,7 +15,7 @@ dest_files=["res://.godot/imported/forest_floor_nor_gl_1k.jpg-f32ae80ef79dad82eb
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
