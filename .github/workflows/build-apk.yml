@@ -21,18 +21,26 @@ jobs:
         with:
           lfs: true
 
-      - name: Setup
+      - name: Setup Godot config + export templates
         run: |
           mkdir -v -p ~/.local/share/godot/export_templates/
           mkdir -v -p ~/.config/
-          mv /root/.config/godot ~/.config/godot
+          if [ -d /root/.config/godot ]; then cp -r /root/.config/godot ~/.config/godot; fi
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
 
-      - name: Point preset to the CI debug keystore
+      - name: Point preset at the image debug keystore
         run: |
-          sed -i 's@keystore/debug=".*"@keystore/debug="/root/.android/debug.keystore"@g' export_presets.cfg
+          sed -i 's@keystore/debug=".*"@keystore/debug="/root/debug.keystore"@g' export_presets.cfg
           sed -i 's@keystore/debug_user=".*"@keystore/debug_user="androiddebugkey"@g' export_presets.cfg
           sed -i 's@keystore/debug_password=".*"@keystore/debug_password="android"@g' export_presets.cfg
+          echo "----- preset keystore lines -----"
+          grep -n 'keystore/debug' export_presets.cfg
+          echo "----- sdk lines -----"
+          grep -n 'sdk' export_presets.cfg
+
+      - name: Import project once
+        run: |
+          godot --headless --editor --quit-after 200 || true
 
       - name: Android Build
         run: |
@@ -42,6 +50,6 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: ${EXPORT_NAME}-APK
+          name: Stillwild-APK
           path: build/android/Stillwild.apk
           if-no-files-found: error
