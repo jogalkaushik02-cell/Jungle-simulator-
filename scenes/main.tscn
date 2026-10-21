@@ -1,0 +1,181 @@
+[gd_scene load_steps=22 format=3 uid="uid://bsw1ldma1n0aaa"]
+
+[ext_resource type="Script" path="res://scripts/terrain.gd" id="1_terrain"]
+[ext_resource type="Script" path="res://scripts/scatter.gd" id="2_scatter"]
+[ext_resource type="Script" path="res://scripts/zones.gd" id="3_zones"]
+[ext_resource type="Script" path="res://scripts/camera_rig.gd" id="4_rig"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="5_player"]
+[ext_resource type="Script" path="res://scripts/vehicle.gd" id="6_vehicle"]
+[ext_resource type="Script" path="res://scripts/helicopter.gd" id="7_heli"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="8_hud"]
+[ext_resource type="PackedScene" path="res://assets/characters/hiker_rigged.glb" id="9_hiker"]
+[ext_resource type="PackedScene" path="res://assets/vehicles/1990s-off-roader.glb" id="10_jeep"]
+[ext_resource type="PackedScene" path="res://assets/vehicles/atv-quad.glb" id="11_quad"]
+[ext_resource type="PackedScene" path="res://assets/vehicles/helicopter.fbx" id="12_heli"]
+[ext_resource type="PackedScene" path="res://assets/buildings/beach-hut.glb" id="13_hut"]
+[ext_resource type="PackedScene" path="res://assets/buildings/garage.glb" id="14_garage"]
+[ext_resource type="PackedScene" path="res://scenes/airstrip.tscn" id="15_strip"]
+[ext_resource type="PackedScene" path="res://scenes/water.tscn" id="16_water"]
+
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+sky_horizon_color = Color(0.65, 0.72, 0.8, 1)
+sky_top_color = Color(0.35, 0.55, 0.85, 1)
+ground_bottom_color = Color(0.2, 0.22, 0.18, 1)
+ground_horizon_color = Color(0.6, 0.65, 0.6, 1)
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("sky")
+tonemap_mode = 3
+ambient_light_source = 3
+ambient_light_color = Color(0.7, 0.72, 0.75, 1)
+ambient_light_energy = 0.7
+fog_enabled = true
+fog_density = 0.0025
+
+[sub_resource type="BoxShape3D" id="jeep_shape"]
+size = Vector3(2.1, 1.5, 4.5)
+
+[sub_resource type="BoxShape3D" id="quad_shape"]
+size = Vector3(1.4, 1.1, 2.4)
+
+[sub_resource type="BoxShape3D" id="heli_shape"]
+size = Vector3(2.6, 2.2, 7.6)
+
+[sub_resource type="CapsuleShape3D" id="player_capsule"]
+radius = 0.35
+height = 1.7
+
+[sub_resource type="BoxMesh" id="rotor_blade"]
+size = Vector3(7.0, 0.06, 0.28)
+
+[sub_resource type="BoxMesh" id="tail_blade"]
+size = Vector3(1.4, 0.05, 0.16)
+
+[sub_resource type="StandardMaterial3D" id="rotor_mat"]
+albedo_color = Color(0.08, 0.08, 0.09, 1)
+roughness = 0.5
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.816, 0.578, 0, -0.578, 0.816, 0, 40, 0)
+shadow_enabled = true
+directional_shadow_max_distance = 160.0
+
+[node name="Terrain" type="StaticBody3D" parent="."]
+script = ExtResource("1_terrain")
+
+[node name="Airstrip" parent="." instance=ExtResource("15_strip")]
+
+[node name="Water" parent="." instance=ExtResource("16_water")]
+
+[node name="Scatter" type="MultiMeshInstance3D" parent="."]
+script = ExtResource("2_scatter")
+
+[node name="Hut" parent="." instance=ExtResource("13_hut")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 0, -95)
+
+[node name="Garage" parent="." instance=ExtResource("14_garage")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -140, 0, -100)
+
+[node name="Jeep" type="CharacterBody3D" parent="."]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -56, 0.05, -110)
+script = ExtResource("6_vehicle")
+model_length = 4.3
+cam_dist = 9.0
+
+[node name="Model" parent="Jeep" instance=ExtResource("10_jeep")]
+
+[node name="Shape" type="CollisionShape3D" parent="Jeep"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("jeep_shape")
+
+[node name="Quad" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 0.05, -104)
+script = ExtResource("6_vehicle")
+max_speed = 11.0
+model_length = 2.3
+cam_dist = 7.5
+
+[node name="Model" parent="Quad" instance=ExtResource("11_quad")]
+
+[node name="Shape" type="CollisionShape3D" parent="Quad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+shape = SubResource("quad_shape")
+
+[node name="Helicopter" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0.05, -105)
+script = ExtResource("7_heli")
+model_length = 7.0
+cam_dist = 12.0
+
+[node name="Model" parent="Helicopter" instance=ExtResource("12_heli")]
+
+[node name="MainRotor" type="Node3D" parent="Helicopter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 0)
+
+[node name="BladeX" type="MeshInstance3D" parent="Helicopter/MainRotor"]
+mesh = SubResource("rotor_blade")
+surface_material_override/0 = SubResource("rotor_mat")
+
+[node name="BladeZ" type="MeshInstance3D" parent="Helicopter/MainRotor"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 0)
+mesh = SubResource("rotor_blade")
+surface_material_override/0 = SubResource("rotor_mat")
+
+[node name="TailRotor" type="Node3D" parent="Helicopter"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.7, 2.0, 3.4)
+
+[node name="TailBlade" type="MeshInstance3D" parent="Helicopter/TailRotor"]
+mesh = SubResource("tail_blade")
+surface_material_override/0 = SubResource("rotor_mat")
+
+[node name="Shape" type="CollisionShape3D" parent="Helicopter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+shape = SubResource("heli_shape")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46, 0.2, -110)
+script = ExtResource("5_player")
+
+[node name="Model" parent="Player" instance=ExtResource("9_hiker")]
+
+[node name="Shape" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+shape = SubResource("player_capsule")
+
+[node name="CameraRig" type="Node3D" parent="." groups=["camrig"]]
+script = ExtResource("4_rig")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+fov = 75.0
+far = 600.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Root" type="Control" parent="HUD"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("8_hud")
+
+[node name="Zones" type="Control" parent="HUD"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("3_zones")
+
+[node name="ZoneLabel" type="Label" parent="HUD/Zones"]
+offset_left = 40.0
+offset_top = 30.0
+offset_right = 500.0
+offset_bottom = 80.0
+theme_override_font_sizes/font_size = 34

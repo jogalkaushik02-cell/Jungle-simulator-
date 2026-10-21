@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://cwater0stillwild"]
+
+[sub_resource type="PlaneMesh" id="water"]
+size = Vector2(420, 420)
+subdivide_width = 1
+subdivide_depth = 1
+
+[sub_resource type="StandardMaterial3D" id="water_mat"]
+albedo_color = Color(0.13, 0.24, 0.3, 0.82)
+metallic = 0.3
+roughness = 0.1
+transparency = 1
+cull_mode = 2
+
+[node name="Water" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.98, 0)
+mesh = SubResource("water")
+surface_material_override/0 = SubResource("water_mat")

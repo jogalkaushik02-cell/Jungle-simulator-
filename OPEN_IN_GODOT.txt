@@ -1,0 +1,51 @@
+STILLWILD — HOW TO OPEN & PLAY
+==============================
+
+1. Open the Godot app (4.6) on your phone.
+2. Tap "Import".
+3. Browse to:  /storage/emulated/0/Stillwild/project.godot
+4. Tap "Import & Edit".
+5. Press Play (▶). First run rebuilds the terrain (takes a few seconds).
+
+CONTROLS
+--------
+PHONE (PUBG / Free Fire style, landscape):
+- Left side lower corner: virtual JOYSTICK = move / drive / fly.
+- Right side: drag anywhere (not on a button) = look around.
+- CAM button (top right): switch 1st / 3rd person (on foot).
+- USE button: enter / exit vehicle or helicopter when near.
+- JUMP button: jump (on foot only).
+- On the helicopter, UP / DN buttons appear = climb / descend.
+
+DESKTOP (keyboard, for testing in the editor):
+- W A S D or arrow keys: move (and fly helicopter).
+- Space: jump.   E: enter / exit.   C: camera view.
+- R / F: helicopter lift up / down.
+
+THE WORLD
+---------
+South = airstrip + hangar + shed + jeep, quad (ATV), helicopter.
+Middle = jungle with river running through it.
+North = snowy mountains.  A zone name shows top-left.
+
+WHAT WORKS
+----------
+- Walk the hiker (real animated model, footstep sounds).
+- Drive the jeep and the ATV (real wheels spin, engine sound).
+- Fly the helicopter with real physics (spin up, collective,
+  gravity, drag, tilt, rotor sound).
+- Ambience: wind, forest, river, birds fade by where you are.
+
+IF SOMETHING LOOKS OFF (tell the builder)
+-----------------------------------------
+- "character walks backwards"  -> flip: player.gd model_yaw_offset = 3.14159
+- Jeep/quad drives sideways      -> same idea on vehicle.gd
+- A vehicle/helo faces odd way   -> we rotate its "Model" node in main.tscn
+- Trees float / sink             -> terrain height tweak
+
+MAKING AN APK (when you want to install it as a real app)
+---------------------------------------------------------
+The Godot Android export needs ~1 GB of export templates.
+In Godot:  Editor > Manage Export Templates > Download.
+Then  Project > Export > Android > give a keystore > Export.
+This is optional — you can play right inside the Godot app now.

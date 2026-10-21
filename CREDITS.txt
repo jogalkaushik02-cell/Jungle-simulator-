@@ -1,0 +1,25 @@
+STILLWILD — CREDITS / ASSET LICENSES
+====================================
+
+All assets are free for use (CC0 or CC-BY). Original makers credited below.
+
+3D MODELS
+---------
+- Nature (trees, plants, rocks): Grab3D / Poly Haven — CC0.
+- Characters (hiker): Grab3D — CC0.
+- Vehicles (off-roader, ATV quad): Grab3D — CC0.
+- Buildings (beach hut, garage): Grab3D — CC0.
+- Helicopter (helicopter_alt.glb): poly.pizza, by kazuma — CC0 1.0.
+- Airplane / helicopter.fbx: user-provided.
+
+TEXTURES
+--------
+- Ground textures (forest floor, mud+leaves, rock, snow): Poly Haven — CC0.
+
+SOUNDS
+------
+- Wind, forest, river, birds, helicopter, engine, engine start,
+  footsteps, propeller: sfxmint.com — CC0.
+- UI click: Kenney UI Audio (Calinou mirror) — CC0.
+
+If any credit needs adjusting, edit this file.

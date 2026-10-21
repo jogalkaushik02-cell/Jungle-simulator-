@@ -1,35 +1,53 @@
-# Unity License Activator
+# Stillwild
 
-Automatically generates your free **Unity Personal** `.ulf` license file using GitHub Actions.
+A peaceful realistic-style 3D nature game made with **Godot 4.6**.
+Explore a small bush airstrip, walk or drive through a jungle with a river,
+and climb into snowy mountains. Playable on Android phones with a
+PUBG / Free Fire style touch interface.
 
-## How to run it (on your phone)
+## What's inside
 
-### Step 1 — Add your Unity credentials (one time only)
+- **Terrain:** procedural 400 m x 400 m island. South = airstrip plateau,
+  middle = jungle + carved river, north = snowy mountains. Slope- and
+  height-blended ground shader using real scanned textures.
+- **Hiker:** animated third/first-person character with footstep sounds.
+- **Jeep** and **ATV quad:** drivable, wheels spin, engine sound.
+- **Helicopter:** real physics model (rotor spin-up, collective, gravity,
+  drag, tilt) with dedicated fly controls.
+- **Touch HUD:** left virtual joystick, right drag-look, round CAM / USE /
+  JUMP / UP / DN buttons.
+- **Ambience:** wind, forest, river and bird sounds that fade by location.
 
-1. Open your repo on GitHub → **Settings** → **Secrets and variables** → **Actions**
-2. Tap **New repository secret** and add two secrets:
+## Controls
 
-| Name | Value |
-|------|-------|
-| `UNITY_EMAIL` | Your Unity account email |
-| `UNITY_PASSWORD` | Your Unity account password |
+Phone (landscape): left joystick = move/drive/fly, drag right side = look,
+CAM = view, USE = enter/exit vehicle, JUMP = jump, UP/DN = helicopter climb.
 
-### Step 2 — Run the workflow
+Desktop: WASD/arrows to move, Space jump, E enter/exit, C camera, R/F heli lift.
 
-1. Go to the **Actions** tab → select **Acquire Unity License**
-2. Tap **Run workflow** → **Run workflow**
-3. Wait for both jobs to finish (green checkmarks)
+## Getting the APK (no PC needed)
 
-### Step 3 — Download your license
+This repo ships two GitHub Actions workflows. The game uses the first one.
 
-1. When the run finishes, open the run page
-2. Scroll to **Artifacts** → download **`unity-license-ulf`**
-3. Inside is your `.ulf` file — this IS your license
+**Build the APK in the cloud:**
 
-If it fails, download the **`error-screenshot`** artifact to see where it stopped.
+1. Push to `main` (or open the **Actions** tab and run
+   **Build Stillwild APK** manually).
+2. Open the finished run.
+3. Download the **Stillwild-APK** artifact.
+4. Copy `Stillwild.apk` to your phone and tap to install.
 
-## Notes
+## Running in the Godot editor
 
-- Personal licenses expire occasionally — just run the workflow again to get a fresh `.ulf`
-- Never commit your email/password or the `.ulf` file into this repo
-- Your credentials are stored only as encrypted GitHub secrets
+Open `project.godot` in Godot 4.6 and press Play.
+See `OPEN_IN_GODOT.txt` for details.
+
+## Also in this repo
+
+- `UNITY_LICENSE.md` — how to generate a free Unity Personal `.ulf`
+  license with the **Acquire Unity License** workflow.
+
+## Assets
+
+Free / CC0 models and textures (Grab3D, Poly Haven, Kenney, poly.pizza) and
+CC0 sounds. See `CREDITS.txt`.
