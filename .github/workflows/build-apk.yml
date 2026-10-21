@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  GODOT_VERSION: 4.6.3
+  GODOT_VERSION: 4.7.2
   EXPORT_NAME: Stillwild
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
     name: Export Android APK
     runs-on: ubuntu-24.04
     container:
-      image: barichello/godot-ci:4.6.3
+      image: barichello/godot-ci:4.7.2
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,6 +27,16 @@ jobs:
           mkdir -v -p ~/.config/
           if [ -d /root/.config/godot ]; then cp -r /root/.config/godot ~/.config/godot; fi
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+
+      - name: Install Android platform + build-tools the project needs
+        run: |
+          sdkmanager --install "cmdline-tools;latest" > /dev/null 2>&1 || true
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/cmdline-tools/cmdline-tools/bin:$PATH"
+          yes | sdkmanager --licenses > /dev/null 2>&1 || true
+          # The project targets SDK 33; the image already ships build-tools 33.0.2.
+          sdkmanager "platforms;android-33" "build-tools;33.0.2" > /dev/null 2>&1 || true
+          echo "----- platforms -----"; ls $ANDROID_HOME/platforms || true
+          echo "----- build-tools -----"; ls $ANDROID_HOME/build-tools || true
 
       - name: Point preset at the image debug keystore
         run: |
