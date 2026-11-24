@@ -12,7 +12,7 @@ roughness = 0.1
 transparency = 1
 cull_mode = 2
 
-[node name="Water" type="MeshInstance3D" parent="."]
+[node name="Water" type="MeshInstance3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.98, 0)
 mesh = SubResource("water")
 surface_material_override/0 = SubResource("water_mat")
